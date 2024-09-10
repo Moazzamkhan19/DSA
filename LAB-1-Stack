@@ -1,0 +1,43 @@
+public class Stack {
+    int top;
+    char[] stackarr;
+    int maxsize;
+
+    public Stack(int size)
+    {
+        top=-1;
+        maxsize=size;
+        stackarr=new char[maxsize];
+    }
+    public void push(char value)
+    {
+        if(isfull())
+        {
+            System.out.println("stack is full");
+        }
+        else {
+            top++;
+            stackarr[top]=value;
+        }
+    }
+    public char pop(){
+        if(isempty())
+        {
+            System.out.println("stack is empty");
+        }
+        else {
+            top--;
+            char removedvalue=stackarr[top];
+        }
+        return stackarr[top];
+    }
+    public void peek(){
+        System.out.println(stackarr[top]);
+    }
+    public boolean isfull(){
+        return (top==maxsize-1);
+    }
+    public boolean isempty(){
+        return (top==-1);
+    }
+}
