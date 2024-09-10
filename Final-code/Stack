@@ -1,0 +1,47 @@
+public class Stack {    int top;
+    char[] stackarr;
+    int maxsize;
+
+    public Stack(int size) {
+        top = -1;
+        maxsize = size;
+        stackarr = new char[maxsize];
+    }
+
+    public void push(char value) {
+        if (isfull()) {
+            System.out.println("Stack is full");
+        } else {
+            top++;
+            stackarr[top] = value;
+        }
+    }
+
+    public char pop() {
+        if (isempty()) {
+            System.out.println("Stack is empty");
+            return '\0'; // return null character if stack is empty
+        } else {
+            char removedValue = stackarr[top]; // store the top value before decrementing
+            top--;
+            return removedValue; // return the stored value
+        }
+    }
+
+    public char peek() {
+        if (isempty()) {
+            System.out.println("Stack is empty");
+            return '\0'; // return null character if stack is empty
+        } else {
+            return stackarr[top]; // return the top value without removing it
+        }
+    }
+
+    public boolean isfull() {
+        return (top == maxsize - 1);
+    }
+
+    public boolean isempty() {
+        return (top == -1);
+    }
+}
