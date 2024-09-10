@@ -1,0 +1,69 @@
+public class Main {
+    public static void main(String[] args)
+    {
+        String infix="(A+B)*(C+D)";
+        Stack stack=new Stack(infix.length());
+        Stack PSN=new Stack(infix.length());
+
+        for(int i=0;i<infix.length();i++)
+        {
+            char c=infix.charAt(i);
+            if(isoperand(c))
+            {
+                PSN.push(c);
+            }
+            else if(c=='(')
+            {
+                stack.push(c);
+            }
+            else if(c==')')
+            {
+                while(!stack.isempty() && stack.peek()!='(')
+                {
+                    PSN.push(stack.pop());
+                }
+                stack.pop();
+            }
+            else
+            {
+                while((!stack.isempty() && precedence(c) <= precedence(stack.peek())))
+                {
+                    PSN.push(stack.pop());
+                }
+                stack.push(c);
+            }
+        }
+        while (!stack.isempty())
+        {
+            PSN.push(stack.pop());
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        while (!PSN.isempty())
+        {
+            stringBuilder.insert(0, PSN.pop() + "");
+        }
+
+        System.out.println("Postfix expression: " + stringBuilder.toString().trim());
+    }
+    public static boolean isoperand(char c)
+    {
+        return (Character.isLetterOrDigit(c));
+    }
+    public static int precedence(char c)
+    {
+        switch (c)
+        {
+            case '+':
+            case '-':
+                return 1;
+            case '/':
+            case '*':
+                return 2;
+            case '^':
+                return 3;
+        }
+        return -1;
+    }
+
+}
