@@ -1,0 +1,64 @@
+public class Main {
+    public static void main(String[] args)
+    {
+        Stack stack=new Stack(2);
+    String infix="A+B*C";
+   String postfix = " ";
+
+    for(int i=0;i<infix.length();i++)
+    {
+     char c=infix.charAt(i);
+     if(isoperand(c))
+     {
+       postfix+=c;
+     }
+     else if(c=='(')
+     {
+         stack.push(c);
+     }
+     else if(c==')')
+     {
+
+         while(!stack.isempty() && stack.peek()!='(')
+         {
+             postfix += stack.pop();
+         }
+         stack.pop();
+
+     }
+     else
+     {
+        while((!stack.isempty() && precedence(c) <= precedence(stack.peek())))
+        {
+        postfix+=stack.pop();
+        }
+        stack.push(c);
+     }
+    }
+        while (!stack.isempty()) {
+            postfix += stack.pop();
+        }
+        System.out.println(postfix);
+
+    }
+    public static boolean isoperand(char c)
+    {
+        return (Character.isLetterOrDigit(c));
+    }
+    public static int precedence(char c)
+    {
+        switch (c)
+        {
+            case '+':
+            case '-':
+                return 1;
+            case '/':
+            case '*':
+                return 2;
+            case '^':
+                return 3;
+        }
+        return -1;
+    }
+
+}
