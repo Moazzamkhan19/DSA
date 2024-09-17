@@ -1,0 +1,46 @@
+public class PostfixEval {
+    public static void main(String[] args)
+    {
+        Stack stack=new Stack(6);
+        String infix="53+82-*";
+        for(int i=0;i<infix.length();i++)
+        {
+            char c=infix.charAt(i);
+            if(isoperand(c))
+            {
+                stack.push(c-'0');
+            }
+            else
+            {
+                int op2=stack.pop();
+                int op1=stack.pop();
+                int x1=performoperation(op1,op2,c);
+                stack.push(x1);
+            }
+        }
+        System.out.println("Result "+stack.pop());
+
+    }
+    public static boolean isoperand(int c)
+    {
+        return (Character.isDigit(c));
+    }
+    public static int performoperation(int op1,int op2,char c)
+    {
+        switch (c)
+        {
+            case '+':
+                return op1+op2;
+            case '-':
+                return op1-op2;
+            case '*':
+                return op1*op2;
+            case '/':
+                if(op2!=0)
+                {
+                return op1/op2;
+                }
+        }
+        return -1;
+    }
+}
