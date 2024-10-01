@@ -1,116 +1,102 @@
-public class LinkedList extends Node {
+public class LinkedList {
     Node head;
-    Node ptr;
-
-    public LinkedList() {
-    }
-
-    public void add(int val)
+    public LinkedList()
     {
-        Node newNode=new Node(val);
+        head=null;
+    }
+    public void Add(int val)
+    {
+        Node newnode=new Node(val);
         if(head==null)
         {
-            head=newNode;
+            head=newnode;
         }
         else
         {
-            ptr=head;
-            while (ptr.next!=null)
+            Node ptr=head;
+            while(ptr.next!=null)
             {
                 ptr=ptr.next;
             }
-            ptr.next=newNode;
+            ptr.next=newnode;
         }
-
     }
-    public void addatfront(int val)
+    public void Delete()
     {
-        Node newNode=new Node(val);
+        Node ptr=head;
         if(head==null)
         {
-            head=newNode;
+            System.out.println("List is empty");
         }
         else
         {
-            newNode.next=head;
-            head=newNode;
+            while(ptr.next.next!=null)
+            {
+                ptr=ptr.next;
+            }
+            ptr.next=null;
         }
+        System.out.println("Node deleted");
     }
-
-    public void addmiddle(int val,int num)//num is the number before which we will place number
-                                            //val is the value that will be placed
+    public void Display()
     {
-        Node newNode=new Node(val);
+        Node ptr=head;
+        while(ptr!=null)
+        {
+            System.out.println(ptr.data);
+            ptr=ptr.next;
+        }
+
+    }
+    public void addfront(int val)
+    {
+        Node newnode=new Node(val);
         if(head==null)
         {
-            head=newNode;
+            head=newnode;
         }
         else
         {
-            Node prev = null; //head one
-            Node curr; // head two
-            curr=head;
-            while(curr!=null && curr.data!=num)
+            newnode.next=head;
+            head=newnode;
+        }
+    }
+    public void addmiddle(int val,int num)//num is the position after Node will be inserted
+    {
+        Node newnode=new Node(val);
+        if(head==null)
+        {
+            head=newnode;
+        }
+        else
+        {
+            Node curr =head;
+            Node prev =null;
+            while (curr.data!=num)
             {
                 prev=curr;
                 curr=curr.next;
             }
-            if (curr != null) {
-                newNode.next = curr;
-                if (prev != null) {
-                    prev.next = newNode;
-                } else {
-                    head = newNode;
-                }
+            prev.next=newnode;
+            newnode.next=curr;
+        }
+    }
+
+    public void deletemiddle(int num)//num is the position after Node will be inserted
+    {
+            Node curr =head;
+            Node prev =null;
+            while (curr.data!=num)
+            {
+                prev=curr;
+                curr=curr.next;
             }
+            prev.next=curr.next;
         }
-    }
-
-    public void delete()
-    {
-        if(head!=null)
+        public void deletestar()
         {
-            head=head.next;
+            Node ptr=head;
+            head=ptr.next;
+            ptr=null;
         }
-    }
-    public void deleteend()
-    {
-        if (head == null) {
-            return;
-        }
-       Node prev=null;
-        Node curr=head;
-        while(curr.next!=null)
-        {
-            prev=curr;
-            curr=curr.next;
-        }
-        prev.next=null;
-
-    }
-
-    public void deletemiddle(int num)
-    {
-        Node prev=null;
-        Node curr=head;
-        while(curr.data!=num)
-        {
-            prev=curr;
-            curr=curr.next;
-        }
-        if (curr != null)
-        {
-            prev.next = curr.next;
-        }
-    }
-
-    public void display()
-    {
-        Node temp=head;
-        while(temp!=null)
-        {
-            System.out.println(temp.data);
-            temp=temp.next;
-        }
-    }
 }
