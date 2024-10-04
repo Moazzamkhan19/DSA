@@ -31,8 +31,8 @@ public class Stack
         }
         else
         {
-            top--;
             int removedvalue=stackarray[top];
+            top--;
             System.out.println("value poped "+removedvalue);
 
         }    }
