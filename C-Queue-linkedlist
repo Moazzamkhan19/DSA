@@ -1,0 +1,31 @@
+
+import java.util.LinkedList;
+
+public class CircularQueue {
+    LinkedList<Integer>list=new LinkedList<>();
+    Node front;
+    Node rear;
+
+    public CircularQueue()
+    {
+        front=null;
+        rear=null;
+    }
+    public void Enqueue(int val)
+    {
+        Node newNode=new Node(val);
+        if(front==null)
+        {
+            front=newNode;
+            rear=newNode;
+            rear.next=front;
+        }
+        else
+        {
+            rear.next=newNode;
+            rear=newNode;
+            rear.next=front;
+        }
+
+    }
+}
