@@ -1,0 +1,30 @@
+import org.w3c.dom.Node;
+
+import java.util.LinkedList;
+
+public class Main {
+    public static void main(String[] args)
+    {
+        LinkedList<Integer>list=new LinkedList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        toarray(list);
+    }
+
+    public static void toarray(LinkedList<Integer> list) {
+        // Converting a linked list to an array
+        int[] arr = new int[list.size()];
+        int i = 0;
+        while (i < list.size()) {
+            arr[i] = list.get(i);
+            i++;
+        }
+        for(int j=0; j< arr.length;j++)
+        {
+            System.out.println(" "+arr[j]);
+        }
+    }
+}
