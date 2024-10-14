@@ -1,0 +1,29 @@
+public class Main {
+    public static void main(String[] args)
+    {
+        BinaryTree tree = new BinaryTree();
+        Node root = null;
+        root = tree.insert(root, 5);
+        root = tree.insert(root, 2);
+        root = tree.insert(root, 8);
+        root = tree.insert(root, 3);
+        root = tree.insert(root, 9);
+
+        displayTree(root);
+
+    }
+    public static void displayTree(Node node) {
+        if (node == null) return;
+
+        System.out.print(node.key + " ");
+
+        if (node.left != null) {
+            displayTree(node.left);
+        }
+
+        if (node.right != null) {
+            displayTree(node.right);
+        }
+    }
+
+}
