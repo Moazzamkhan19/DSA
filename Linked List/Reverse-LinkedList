@@ -1,0 +1,38 @@
+import org.w3c.dom.Node;
+
+import java.util.LinkedList;
+import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args)
+    {
+       LinkedList<Integer>list=new LinkedList<>();
+       list.add(1);
+       list.add(2);
+       list.add(3);
+       list.add(4);
+
+       Rervse(list);
+    }
+    public static void Rervse(LinkedList<Integer>list)
+    {
+        Stack<Integer>stack=new Stack<>();
+        LinkedList<Integer>list1=new LinkedList<>();
+
+        int i=0;
+        while(i<list.size())
+        {
+            stack.push(list.get(i));
+            i++;
+        }
+        while(!stack.isEmpty())
+        {
+            list1.add(stack.pop());
+        }
+
+        for(int j=0;j<list1.size();j++)
+        {
+            System.out.print(" "+list1.get(j));
+        }
+    }
+}
