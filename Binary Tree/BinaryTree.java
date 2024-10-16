@@ -108,6 +108,62 @@ public class BinaryTree {
         }
         return node;
     }
+       public Node isMin(Node node)
+    {
+       //check the minimum in right side of root only  OR max in left side
+        if(node==null)
+        {
+            return null;
+        }
+        Node minNode=node.right;
+        while(minNode.right!=null)
+        {
+            minNode=minNode.right;
+        }
+        return minNode;
+    }
+    public Node Delete(Node root,int key)
+    {
+    if(root==null)
+    {
+        return null;
+    }
+    else if(key< root.key)
+    {
+        root.left=Delete(root.left,key);
+    }
+    else if(key>root.key)
+    {
+        root.right=Delete(root.right,key);
+    }
+    else
+    {
+        //CASE 1 . THE NODE IS LEAF NODE ( NO CHILD)
+        if(!hasLeft(root) && !hasRight(root))
+        {
+            return null;
+        }
+        //CASE 2 . THE NODE HAS ONLY ONE CHILD
+        else if(hasRight(root))
+        {
+           return root.right;
+        }
+        else if(hasLeft(root))
+        {
+           return root.left;
+        }
+        //CASE 3 . The NODE HAS 2 CHILDREN
+        else
+        {
+            int temp=root.key;
+            root=isMin(root.right);
+            root.key=temp;
+            root.right = Delete(root.right, root.key);
+            return root.right;
+        }
+    }
+    return root;
+    }
 }
 
 
