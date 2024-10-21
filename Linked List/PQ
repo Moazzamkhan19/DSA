@@ -1,0 +1,106 @@
+public class PriorityQueue
+{
+    int front;
+    int rear;
+    int size;
+    int[] queue;
+
+    public PriorityQueue(int size)
+    {
+    front=-1;
+    rear=0;
+    this.size=size;
+    queue=new int[size];
+    }
+   /* public void Enqueue(int value)
+    {
+        if(front==-1)
+        {
+            front++;
+            queue[front]=value;
+        }
+        else
+        {
+         int temp;
+         if(value>queue[rear])
+         {
+             temp=rear+1;
+             queue[temp]=queue[rear];
+             queue[rear]=value;
+         }
+         else if(value<queue[rear])
+         {
+             rear++;
+             queue[rear]=value;
+         }
+        }
+    }
+
+    */
+   public void Enqueue(int value)
+   {
+       if(isfull()) {
+           System.out.println("Queue is full");
+           return;
+       }
+       if(front == -1) {
+           front++;
+           queue[front] = value;
+           rear++;
+       } else {
+           int i = rear;
+           while(i >= 0 && queue[i] < value)
+           {
+               queue[i+1] = queue[i];
+               i--;
+           }
+           queue[i+1] = value;
+           rear++;
+       }
+   }
+
+
+    public void Dequeue()
+    {
+        if(isempty())
+        {
+            System.out.println("Empty");
+            return;
+        }
+        else
+        {
+            rear--;
+        }
+    }
+    public boolean isfull()
+    {
+        return (rear==size);
+    }
+    public boolean isempty()
+    {
+        return (front==0);
+    }
+    public int front()
+    {
+        if(isempty())
+        {
+            return -1;
+        }
+        return queue[front];
+    }
+    public int rear()
+    {
+        if(isempty())
+        {
+            return -1;
+        }
+        return queue[rear];
+    }
+
+    public void Display() {
+        for(int i = front; i < rear; i++) {
+            System.out.print(queue[i] + " ");
+        }
+        System.out.println();
+    }
+}
