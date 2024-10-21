@@ -1,0 +1,172 @@
+public class DoublyLinkedList
+{
+   Node head;
+    Node tail;
+    public DoublyLinkedList()
+    {
+        head=null;
+        tail=null;
+    }
+    public void add(int value)
+    {
+        Node newnode=new Node(value);
+        if(head==null)
+        {
+             head=newnode;
+            tail=newnode;
+        }
+        else
+        {
+           tail.next=newnode;
+           newnode.prev=tail;
+           tail=newnode;
+        }
+    }
+    public void addstart(int value)
+    {
+        Node newnode=new Node(value);
+        if( head==null)
+        {
+             head=newnode;
+            tail=newnode;
+        }
+        else
+        {
+            head.prev=newnode;
+            newnode.next=head;
+             head=newnode;
+        }
+    }
+    public void Delete()
+    {
+        if( head==null)
+        {
+            return;
+        }
+        if(head.next==null)
+        {
+             head=null;
+        }
+        else
+        {
+            Node ptr=head ;
+            while(ptr.next!=null)
+            {
+                ptr=ptr.next;
+            }
+            tail=ptr.prev;
+            tail.next=null;
+
+        }
+    }
+    public int gettail()
+    {
+        if(tail==null)
+        {
+            return -1;
+        }
+        return (tail.data);
+    }
+    public int gethead()
+    {
+        if( head==null)
+        {
+            return -1;
+        }
+        return (head.data);
+    }
+    public Node Reverse(Node node)
+    {
+        if(node ==null)
+        {
+            return null;
+        }
+
+            Node temp= node.prev;
+            node.prev= node.next;
+            node.next=temp;
+
+            if(node.prev==null)
+            {
+                return node;
+            }
+        return Reverse(node);
+    }
+
+    public  void printList()
+    {
+        Node ptr= head;
+        while (ptr != null) {
+            System.out.print(ptr.data + " ");
+            ptr = ptr.next;
+        }
+        System.out.println();
+    }
+    //----------------------------------Circular doubly --------------------------------------------------//
+    public void addcirculardoubly(int value)
+    {
+        Node newnode=new Node(value);
+        if( head==null)
+        {
+            head =newnode;
+            tail=newnode;
+            newnode.next=head;
+        }
+        else
+        {
+            tail.next=newnode;
+            newnode.prev=tail;
+            tail=newnode;
+            tail.next= head;
+            head.prev=tail;
+        }
+    }
+    public void deletecirculardoubly()
+    {
+        if( head==null)
+        {
+            return;
+        }
+        if(head.next==null)
+        {
+             head=null;
+            tail=null;
+        }
+        else
+        {
+            Node ptr=null;
+            ptr=head ;
+            while(ptr!=tail)
+            {
+                ptr=ptr.next;
+            }
+            tail=ptr.prev;
+            tail.next=head ;
+            head.prev=tail;
+        }
+    }
+    public void Reverse() //sawping links
+    {
+    Node last=null;
+    Node curr=head;
+    while(curr!=null)
+    {
+        last=curr.prev;
+        curr.prev=curr.next;
+        curr.next=last;
+        curr=curr.prev;  // moving the curr pointer forward
+    }
+    head=last.prev; // now previous is next and next is previous
+    print();
+    }
+    public void print() {
+        Node temp = head;
+        while (temp!= null) {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+
+
+}
