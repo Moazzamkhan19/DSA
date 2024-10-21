@@ -1,0 +1,38 @@
+public class PriorityLinkedList {
+    Node front;
+    Node rear;
+    public PriorityLinkedList()
+    {
+        front =null;
+        rear=null;
+    }
+    public void Enqueue(int value) {
+        Node newNode = new Node(value);
+        if (front == null || front.data < value) {
+            newNode.next = front;
+            front = newNode;
+        } else {
+            Node current = front;
+            while (current.next != null && current.next.data > value) {
+                current = current.next;
+            }
+            newNode.next = current.next;
+            current.next = newNode;
+        }
+    }
+    public void Display()
+    {
+        Node ptr=front;
+        while(ptr!=null)
+        {
+            System.out.println(ptr.data);
+            ptr=ptr.next;
+        }
+    }
+    public void Dequeue()
+    {
+        front=front.next;
+    }
+
+
+}
