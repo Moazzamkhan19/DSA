@@ -115,7 +115,7 @@ public class BinaryTree {
         {
             return null;
         }
-        Node minNode=node.right;
+        Node minNode=node.left;
         while(minNode.right!=null)
         {
             minNode=minNode.right;
