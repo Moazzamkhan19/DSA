@@ -108,19 +108,19 @@ public class BinaryTree {
         }
         return node;
     }
-       public Node isMin(Node node)
+       public Node isMax(Node node)
     {
        //check the minimum in right side of root only  OR max in left side
         if(node==null)
         {
             return null;
         }
-        Node minNode=node.left;
-        while(minNode.right!=null)
+        Node maxNode=node.left;
+        while(maxNode.right!=null)
         {
-            minNode=minNode.right;
+            maxNode=maxNode.right;
         }
-        return minNode;
+        return maxNode;
     }
     public Node Delete(Node root,int key)
     {
