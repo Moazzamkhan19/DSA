@@ -37,7 +37,7 @@ public class Heap {
     }
 
 
-    static void printHeap(int arr[], int N)
+    public void printHeap(int arr[], int N)
     {
         System.out.println(
                 "Array representation of Heap is:");
@@ -46,5 +46,50 @@ public class Heap {
             System.out.print(arr[i] + " ");
 
         System.out.println();
+    }
+    public void Delete(int heap[] , int N)
+    {
+        int last=N-1; // accessing last element
+        //swaping
+        int swap=heap[0];
+        heap[0]=heap[last];
+        heap[last]=swap;
+        //reduce the size ( deleting )
+        N=N-1;
+        //Maxheapify the updated heap
+        heapify(heap,N,0);
+        printHeap(heap,N);
+    }
+    // for selected value
+    public void DeleteCustom(int heap[],int N,int number)
+    {
+        int pos=0;
+        //finding the given number
+        for(int i=0;i<N;i++)
+        {
+            if(heap[i]==number)
+            {
+                 pos=i;
+            }
+        }
+        //finding the last element
+        int last=N-1;
+        //swaping the number with the last element
+        int swap=heap[last];
+        heap[last]=heap[pos];
+        heap[pos]=swap;
+        //reducing size
+        N=N-1;
+        //heapifying the updated heap
+        buildHeap(heap,N);
+        printHeap(heap,N);
+    }
+    public void insert(int[] heap, int N, int value)
+    {
+        int[] newHeap=new int[N+1];
+        System.arraycopy(heap,0,newHeap,0,N);
+        newHeap[N]=value;
+        buildHeap(newHeap,N+1);
+        printHeap(newHeap,N+1);
     }
 }
