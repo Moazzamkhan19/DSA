@@ -1,0 +1,197 @@
+public class AVLTree {
+    Node root;
+
+    public AVLTree() {}
+
+    // Height of given node
+    public int Height(Node node) {
+        if (node == null) {
+            return 0;
+        }
+        return node.height;
+    }
+
+    // Getting the balance value of a node
+    public int getBalance(Node node) {
+        if (node == null) {
+            return 0;
+        }
+        return (Height(node.left)) - (Height(node.right));
+    }
+
+    // Rotating to RR
+    public Node RotateRight(Node y) {
+        Node x = y.left;
+        Node temp = x.right;
+
+        x.right = y;
+        y.left = temp;
+
+        y.height = Math.max(Height(y.left), Height(y.right)) + 1;
+        x.height = Math.max(Height(x.left), Height(x.right)) + 1;
+
+        return x;
+    }
+
+    // Rotating to LL
+    public Node RotateLeft(Node x) {
+        Node y = x.right;
+        Node temp = y.left;
+
+        y.left = x;
+        x.right = temp;
+
+        x.height = Math.max(Height(x.left), Height(x.right)) + 1;
+        y.height = Math.max(Height(y.left), Height(y.right)) + 1;
+
+        return y;
+    }
+
+    //-----------------Insert----------------//
+    public Node insert(Node node, int key) {
+        if (node == null) {
+            return new Node(key);
+        }
+        if (key < node.key) {
+            node.left = insert(node.left, key);
+        } else if (key > node.key) {
+            node.right = insert(node.right, key);
+        } else {
+            return node;
+        }
+
+        node.height = 1 + Math.max(Height(node.left), Height(node.right));
+        int balance = getBalance(node);
+        // LL case
+        if (balance > 1 && key < node.left.key) {
+            return RotateRight(node);
+        }
+        // RR case
+        if (balance < -1 && key > node.right.key) {
+            return RotateLeft(node);
+        }
+        // LR case
+        if (balance > 1 && key > node.left.key) {
+            node.left = RotateLeft(node.left);
+            return RotateRight(node);
+        }
+        // RL case
+        if (balance < -1 && key < node.right.key) {
+            node.right = RotateRight(node.right);
+            return RotateLeft(node);
+        }
+        return node;
+    }
+
+    //-----------------Delete----------------//
+    public Node delete(Node node, int key) {
+        if (node == null) {
+            return node;
+        }
+
+        // Step 1: Perform standard BST delete
+        if (key < node.key) {
+            node.left = delete(node.left, key); // Delete from the left subtree
+        } else if (key > node.key) {
+            node.right = delete(node.right, key); // Delete from the right subtree
+        } else {
+            // Node to be deleted is found
+
+            // Case 1: Node with only one child or no child
+            if (node.left == null || node.right == null) {
+                Node temp = (node.left != null) ? node.left : node.right;
+
+                if (temp == null) {
+                    temp = node; // No child case (leaf node)
+                    node = null;
+                } else {
+                    node = temp; // One child case
+                }
+            } else {
+                // Case 2: Node with two children
+                Node temp = minValueNode(node.right); // Get the in-order successor (smallest node in the right subtree)
+                node.key = temp.key; // Copy the in-order successor's value to this node
+                node.right = delete(node.right, temp.key); // Delete the in-order successor
+            }
+        }
+
+        // If the tree had only one node, then return it
+        if (node == null) {
+            return node;
+        }
+
+        // Step 2: Update the height of the current node
+        node.height = 1 + Math.max(Height(node.left), Height(node.right));
+
+        // Step 3: Get the balance factor of this node
+        int balance = getBalance(node);
+
+        // Step 4: Perform rotations to balance the tree
+
+        // Left-Left (LL) case
+        if (balance > 1 && getBalance(node.left) >= 0) {
+            return RotateRight(node);
+        }
+
+        // Left-Right (LR) case
+        if (balance > 1 && getBalance(node.left) < 0) {
+            node.left = RotateLeft(node.left);
+            return RotateRight(node);
+        }
+
+        // Right-Right (RR) case
+        if (balance < -1 && getBalance(node.right) <= 0) {
+            return RotateLeft(node);
+        }
+
+        // Right-Left (RL) case
+        if (balance < -1 && getBalance(node.right) > 0) {
+            node.right = RotateRight(node.right);
+            return RotateLeft(node);
+        }
+
+        return node;
+    }
+
+    // Helper function to get the node with the smallest key value (in-order successor)
+    public Node minValueNode(Node node) {
+        Node current = node;
+        while (current.left != null) {
+            current = current.left;
+        }
+        return current;
+    }
+    private void display(Node node, int level) {
+        if (node != null) {
+            // Indentation to represent the level of the node
+            String indent = "    ".repeat(level);
+
+            // Print the right child first (so it appears on the right side)
+            if (node.right != null) {
+                display(node.right, level + 1);
+            }
+
+            // Print the current node's key
+            System.out.println(indent + node.key);
+
+            // Print the left child
+            if (node.left != null) {
+                display(node.left, level + 1);
+            }
+        }
+    }
+
+    // Helper function to print the tree in-order (sorted)
+    public void printInOrder() {
+        printInOrder(root);
+    }
+
+    // Recursive function to print the tree in-order
+    private void printInOrder(Node node) {
+        if (node != null) {
+            printInOrder(node.left);
+            System.out.print(node.key + " ");
+            printInOrder(node.right);
+        }
+    }
+}
