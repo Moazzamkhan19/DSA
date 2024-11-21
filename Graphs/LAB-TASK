@@ -1,0 +1,122 @@
+class Vertex {
+    String label;
+
+    Vertex(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Vertex vertex = (Vertex) obj;
+        return label.equals(vertex.label);
+    }
+
+    @Override
+    public int hashCode() {
+        return label.hashCode();
+    }
+}
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+public class Graph {
+    List<Vertex> vertices;
+    int[][] arr;
+    int v;
+
+    public Graph(int vertex) {
+        this.v = vertex;
+        arr = new int[vertex][vertex];
+        vertices = new ArrayList<>(vertex);
+    }
+
+    public int SearchVertex(Vertex v) {
+        for (int i = 0; i < vertices.size(); i++) {
+            if (vertices.get(i).equals(v)) { // Use equals instead of ==
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void insertEdge(Vertex v1, Vertex v2) {
+        int i = SearchVertex(v1);
+        int j = SearchVertex(v2);
+
+        if (i == -1 || j == -1) {
+            System.out.println("One or both vertices not found.");
+            return;
+        }
+
+        arr[i][j] = 1;
+        arr[j][i] = 1;
+    }
+
+    public void insertVertex(String label) {
+        if (vertices.size() >= v) { // Use the dynamic vertex limit
+            System.out.println("Graph cannot accommodate more vertices.");
+            return;
+        }
+
+        for (Vertex vertex : vertices) {
+            if (vertex.label.equals(label)) {
+                System.out.println("Vertex with label '" + label + "' already exists.");
+                return;
+            }
+        }
+
+        Vertex vertex = new Vertex(label);
+        vertices.add(vertex);
+    }
+
+    public void Print(Vertex v) {
+        int i = SearchVertex(v);
+        if (i == -1) {
+            System.out.println("Vertex does not exist.");
+            return;
+        }
+
+        boolean[] visited = new boolean[vertices.size()];
+        Queue<Integer> queue = new LinkedList<>();
+
+        visited[i] = true;
+        queue.add(i);
+
+        System.out.println("BFS TRAVERSAL:");
+        while (!queue.isEmpty()) {
+            int currentIndex = queue.poll();
+            System.out.print(vertices.get(currentIndex).label + " ");
+
+            for (int j = 0; j < arr.length; j++) {
+                if (arr[currentIndex][j] > 0 && !visited[j]) {
+                    visited[j] = true;
+                    queue.add(j);
+                }
+            }
+        }
+        System.out.println();
+    }
+}class Vertex {
+    String label;
+
+    Vertex(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Vertex vertex = (Vertex) obj;
+        return label.equals(vertex.label);
+    }
+
+    @Override
+    public int hashCode() {
+        return label.hashCode();
+    }
+}
