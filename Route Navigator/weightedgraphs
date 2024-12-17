@@ -1,0 +1,100 @@
+package com.example.routenavigator;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+public class WeightedGraphs
+{
+    Map<String, Map<String, Integer>> adj;
+    Set<String> vertices;
+
+    public WeightedGraphs() {
+        adj = new HashMap<>();
+        vertices = new HashSet<>();
+    }
+
+    public void addEdge(String s, String d, int weight) {
+        vertices.add(s);
+        vertices.add(d);
+
+        adj.putIfAbsent(s, new HashMap<>());
+        adj.putIfAbsent(d, new HashMap<>());
+
+        adj.get(s).put(d, weight);
+        adj.get(d).put(s, weight);
+    }
+
+    public void print() {
+        for (String vertex : adj.keySet()) {
+            System.out.print(vertex + ": ");
+            for (Map.Entry<String, Integer> entry : adj.get(vertex).entrySet()) {
+                System.out.print("[" + entry.getKey() + " (" + entry.getValue() + ")] ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void dijkstras(String start, String destination) {
+        Map<String, Integer> distances = new HashMap<>();
+        Map<String, String> previous = new HashMap<>();
+        PriorityQueue<String> queue = new PriorityQueue<>(Comparator.comparingInt(distances::get));
+
+        for (String vertex : vertices) {
+            distances.put(vertex, Integer.MAX_VALUE);
+            previous.put(vertex, null);
+        }
+        distances.put(start, 0);
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            String current = queue.poll();
+
+            if (current.equals(destination)) break;
+
+            for (Map.Entry<String, Integer> neighbor : adj.getOrDefault(current, Collections.emptyMap()).entrySet()) {
+                String neighborVertex = neighbor.getKey();
+                int weight = neighbor.getValue();
+
+                int newDist = distances.get(current) + weight;
+                if (newDist < distances.get(neighborVertex)) {
+                    distances.put(neighborVertex, newDist);
+                    previous.put(neighborVertex, current);
+                    queue.add(neighborVertex);
+                }
+            }
+        }
+
+        System.out.println("Shortest path from " + start + " to " + destination + ":");
+        List<String> path = new ArrayList<>();
+        for (String at = destination; at != null; at = previous.get(at)) {
+            path.add(at);
+        }
+        Collections.reverse(path);
+
+        for (String node : path) {
+            System.out.print(node + " ");
+        }
+        System.out.println("\nDistance: " + distances.get(destination));
+
+    }
+
+    public void loadGraphFromFile(String filename) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            int edges = Integer.parseInt(br.readLine().trim());
+
+            for (int i = 0; i < edges; i++) {
+                String[] line = br.readLine().trim().split("\\s+");
+                String source = line[0];
+                String destination = line[1];
+                int weight = Integer.parseInt(line[2]);
+                addEdge(source, destination, weight);
+            }
+        }
+    }
+    public boolean nodeExists(String node) {
+        return vertices.contains(node);
+    }
+
+}
