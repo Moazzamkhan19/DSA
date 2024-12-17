@@ -1,0 +1,134 @@
+package com.example.routenavigator;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.*;
+
+public class RouteNavigatorGUI extends Application {
+    private WeightedGraphs graph = new WeightedGraphs();
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+     @Override
+     public void start(Stage primaryStage) {
+         primaryStage.setTitle("Route Navigator");
+
+         // Load graph from file
+         String filename = "MAPSDATA.txt";
+         try {
+             graph.loadGraphFromFile(filename);
+         } catch (IOException e) {
+             showErrorDialog("File Error", "Failed to load graph data from " + filename);
+             return;
+         }
+
+         // Layout
+         VBox root = new VBox(10);
+         root.setPadding(new Insets(10));
+
+         // Input fields
+         Label sourceLabel = new Label("Enter Source Node:");
+         TextField sourceField = new TextField();
+         Label destinationLabel = new Label("Enter Destination Node:");
+         TextField destinationField = new TextField();
+
+         // Button
+         Button findPathButton = new Button("Find Shortest Path");
+
+         // Output area
+         TextArea outputArea = new TextArea();
+         outputArea.setEditable(false);
+         outputArea.setPrefHeight(200);
+
+         // Add components to layout
+         root.getChildren().addAll(sourceLabel, sourceField, destinationLabel, destinationField, findPathButton, outputArea);
+
+         // Button action
+         findPathButton.setOnAction(e -> {
+             String source = sourceField.getText().trim();
+             String destination = destinationField.getText().trim();
+
+             if (source.isEmpty() || destination.isEmpty()) {
+                 showErrorDialog("Input Error", "Please enter both source and destination nodes.");
+                 return;
+             }
+
+             if (!graph.nodeExists(source) || !graph.nodeExists(destination)) {
+                 showErrorDialog("Node Error", "One or both nodes do not exist in the graph.");
+                 return;
+             }
+
+             // Run Dijkstra's algorithm
+             String result = runDijkstra(source, destination);
+             outputArea.setText(result);
+         });
+
+         // Set the scene and show the stage
+         Scene scene = new Scene(root, 400, 400);
+         primaryStage.setScene(scene);
+         primaryStage.show();
+     }
+
+    private String runDijkstra(String start, String destination) {
+        Map<String, Integer> distances = new HashMap<>();
+        Map<String, String> previous = new HashMap<>();
+        PriorityQueue<String> queue = new PriorityQueue<>(Comparator.comparingInt(distances::get));
+
+        for (String vertex : graph.vertices) {
+            distances.put(vertex, Integer.MAX_VALUE);
+            previous.put(vertex, null);
+        }
+        distances.put(start, 0);
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            String current = queue.poll();
+
+            if (current.equals(destination)) break;
+
+            for (Map.Entry<String, Integer> neighbor : graph.adj.getOrDefault(current, Collections.emptyMap()).entrySet()) {
+                String neighborVertex = neighbor.getKey();
+                int weight = neighbor.getValue();
+
+                int newDist = distances.get(current) + weight;
+                if (newDist < distances.get(neighborVertex)) {
+                    distances.put(neighborVertex, newDist);
+                    previous.put(neighborVertex, current);
+                    queue.add(neighborVertex);
+                }
+            }
+        }
+
+        // Reconstruct the path
+        List<String> path = new ArrayList<>();
+        for (String at = destination; at != null; at = previous.get(at)) {
+            path.add(at);
+        }
+        Collections.reverse(path);
+
+        // Build the output string
+        if (distances.get(destination) == Integer.MAX_VALUE) {
+            return "No path found from " + start + " to " + destination;
+        }
+
+        return "Shortest Path: " + String.join(" -> ", path) + "\nDistance in km : " + distances.get(destination);
+    }
+
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}
