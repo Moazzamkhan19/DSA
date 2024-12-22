@@ -1,0 +1,258 @@
+import java.util.ArrayList;
+
+public class BST
+{
+    Node root;
+    public BST()
+    {
+        root=null;
+    }
+    public void Insert(int key)
+    {
+        root=Insert(root,key);
+    }
+    public void PrintPreOrder()
+    {
+        PreOrder(root);
+    }
+    public void PrintPostOrder()
+    {
+        PostOrder(root);
+    }
+    public void PrintInOrder(){InOrder(root);}
+    public  Node Insert(Node node ,int key)
+    {
+        Node newnode=new Node(key);
+        if(node==null)
+        {
+            node=newnode;
+        }
+        else
+        {
+            if(key<node.key)
+            {
+                node.left=Insert(node.left,key);
+            }
+            else if(newnode.key>node.key)
+            {
+                node.right=Insert(node.right,key);
+            }
+            else
+            {
+                System.out.println("Enter valid number");
+            }
+        }
+        return node;
+    }
+    public void PreOrder(Node node)
+    {
+        if(node!=null)
+        {
+            System.out.print(node.key+" ");
+            PreOrder(node.left);
+            PreOrder(node.right);
+        }
+
+    }
+    public void PostOrder(Node node)
+    {
+        if(node!=null)
+        {
+            PostOrder(node.left);
+            PostOrder(node.right);
+            System.out.print(node.key+" ");
+        }
+    }
+    public void InOrder(Node node)
+    {
+        if(node!=null)
+        {
+            InOrder(node.left);
+            System.out.print(node.key+" ");
+            InOrder(node.right);
+        }
+    }
+    public boolean hasleft(Node node)
+    {
+        if(node.left!=null)
+        {
+           return true;
+        }
+        else{
+        return false;}
+    }
+    public boolean hasright(Node node)
+    {
+        if(node.right!=null)
+        {
+            return true;
+        }
+        else{
+            return false;}
+    }
+    public boolean hasChild(Node node)
+    {
+        if(node.left!=null &&  node.right!=null)
+        {
+            return true;
+        }
+        return false;
+    }
+    public Node Parent(Node node, Node root)
+    {
+        if (node == null || root == null)
+        {
+            return null;
+        }
+        if ((root.left != null && root.left.key == node.key) || (root.right != null && root.right.key == node.key)) {
+            return root;
+        }
+
+        if (node.key < root.key) {
+            return Parent(node, root.left);
+        }
+        else if (node.key > root.key)
+        {
+            return Parent(node, root.right);
+        }
+        else {
+            System.out.println("Enter a valid node");
+            return null;
+        }
+    }
+    public Node Sibling(Node node) {
+        if (node == null)
+        {
+            return null;
+        }
+        Node parent = Parent(node, root);
+        if (parent == null)
+        {
+            return null;
+        }
+        if (parent.left != null && parent.left.key == node.key)
+        {
+            return parent.right;
+        }
+        else if (parent.right != null && parent.right.key == node.key)
+        {
+            return parent.left;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public Node Delete(Node root, int key)
+    {
+        if (root == null)
+        {
+            return root;
+        }
+        // Traverse the tree to find the node to be deleted
+        if (key < root.key)
+        {
+            root.left = Delete(root.left, key);
+        }
+        else if (key > root.key)
+        {
+            root.right = Delete(root.right, key);
+        }
+        else
+        {
+            // Node to be deleted found
+            // Case 1: Node with no child (leaf node)
+            if (root.left == null && root.right == null) {
+                return null;
+            }
+
+            // Case 2: Node with one child
+            if (root.left == null) {
+                return root.right;
+            }
+            else if (root.right == null)
+            {
+                return root.left;
+            }
+
+            // Case 3: Node with two children
+
+            Node successor = findMin(root.right);
+            root.key = successor.key;
+            root.right = Delete(root.right, successor.key);
+        }
+
+        return root;
+    }
+
+    public Node findMin(Node node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+    public Node findNode(Node root, int key) {
+        if (root == null || root.key == key) {
+            return root;
+        }
+        if (key < root.key) {
+            return findNode(root.left, key);
+        } else {
+            return findNode(root.right, key);
+        }
+    }
+    public void leftsubtree(Node node)
+    {
+        if(node!=null)
+        {
+            System.out.print(node.key+" ");
+            leftsubtree(node.left);
+            leftsubtree(node.right);
+        }
+
+    }
+    public void leftsubtreeprint()
+    {
+        leftsubtree(root.left);
+    }
+
+    public void InorderTraversal(Node node,ArrayList<Integer>arr)
+    {
+        if(node!=null)
+        {
+            InorderTraversal(node.left,arr);
+            arr.add(node.key);
+            InorderTraversal(node.right,arr);
+        }
+    }
+    public int InorderPredecessor(int key)
+    {
+        ArrayList<Integer>arr=new ArrayList<>();
+        InorderTraversal(root,arr);
+
+       for(int i=0;i<arr.size();i++)
+       {
+           if(arr.get(i)==key)
+           {
+               return arr.get(i-1) ;
+           }
+       }
+       return 0;
+    }
+    public int InorderSucessor(int key)
+    {
+        ArrayList<Integer>arr=new ArrayList<>();
+        InorderTraversal(root,arr);
+
+        for(int i=0;i<arr.size();i++)
+        {
+            if(arr.get(i)==key)
+            {
+                return arr.get(i+1) ;
+            }
+        }
+        return 0;
+    }
+
+}
