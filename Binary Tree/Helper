@@ -254,5 +254,108 @@ public class BST
         }
         return 0;
     }
+  public int sum()
+    {
+        ArrayList<Integer>arr=new ArrayList<>();
+        InorderTraversal(root,arr);
+        int sum=0;
+
+        for(int i=0;i<arr.size();i++)
+        {
+            sum=sum+ arr.get(i);
+        }
+
+        return sum;
+    }
+    public int Height(Node node)
+    {
+        if(node==null)
+        {
+            return 0;
+        }
+        else
+        {
+            int leftside=Height(node.left);
+            int rightside=Height(node.right);
+            return Math.max(leftside,rightside)+1;
+        }
+    }
+    public int depth(Node node,Node root)
+    {
+        if(node==null)
+        {
+            return 0;
+        }
+        if(root.key==node.key)
+        {
+            return 0;
+        }
+        if(root.key>node.key)
+        {
+            int leftdepth=depth(node,node.left);
+            if(leftdepth==-1)
+            {
+                return -1;
+            }
+            else
+            {
+                return leftdepth+1;
+            }
+        }
+        else
+        {
+            int rightdepth=depth(node,node.right);
+            if(rightdepth==-1)
+            {
+                return -1;
+            }
+            else
+            {
+                return rightdepth+1;
+            }
+        }
+    }
+    public Node RemoveIdentical()
+    {
+        ArrayList<Integer>arr=new ArrayList<>();
+        InorderTraversal(root,arr);
+        System.out.println("Inorder-Traversal-Order");
+        for(int i=0;i<arr.size();i++)
+        {
+            System.out.print(arr.get(i)+" ");
+        }
+        //now checking for an identical numbers occuring
+        int identical=0;
+        for(int i=0;i<arr.size();i++)
+        {
+            for(int j=0;j<arr.size();j++)
+            {
+                if(arr.get(i)==arr.get(j))
+                {
+                    System.out.println("Identical appearance of "+arr.get(i));
+                    identical=arr.get(i);
+                }
+            }
+        }
+        //now removing that identical appearance
+        Delete(root,identical);
+        return root;
+    }
+    public boolean isBST(Node node)
+    {
+        if(node==null)
+        {
+            return true;
+        }
+        if(node.left.key>node.key)
+        {
+            return true;
+        }
+        if (node.right.key>node.key)
+        {
+            return true;
+        }
+        return isBST(node.left) && isBST(node.right);
+    }
 
 }
